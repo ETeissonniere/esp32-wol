@@ -32,6 +32,10 @@ Run the following from the repository root.
 | Flash and immediately monitor | `idf.py -p /dev/ttyACM0 flash monitor` | Press <kbd>Ctrl</kbd>+<kbd>]</kbd> to exit the monitor. |
 | Monitor only | `idf.py -p /dev/ttyACM0 monitor` | Useful when the device is already flashed. |
 
+### Wi-Fi Credentials
+
+Run `idf.py menuconfig`, open `Esp32 WoL Configuration`, and update `WiFi SSID` and `WiFi Password`. The values persist in `sdkconfig`, so rerun menuconfig if you need to change them later.
+
 ## Maintenance Commands
 
 - `idf.py clean` – remove build artefacts while keeping configuration.
