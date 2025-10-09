@@ -9,9 +9,9 @@ Treat it as the single source of truth when adding files or refactoring code.
   alphabetised inside each group.
 - Define module-wide state as `static` variables near the top of the file.
 - Keep helper declarations `static` and `module_scope` (for example
-  `wifi_app_*`, `ethernet_app_*`) to make ownership obvious.
+  `wifi_iface_*`, `ethernet_iface_*`) to make ownership obvious.
 - Prefer small, well-named helpers and let the exported function orchestrate
-  the flow. See `main/wifi_app.c` and `main/ethernet_app.c` for the pattern.
+  the flow. See `main/wifi_iface.c` and `main/ethernet_iface.c` for the pattern.
 - Indent with two spaces and place opening braces on the same line as the
   control statement.
 
@@ -50,7 +50,7 @@ Treat it as the single source of truth when adding files or refactoring code.
 
 - Use comments sparingly. Add them only when the code is non-obvious or has
   ordering constraints.
-- Name static helpers with a `module_action` pattern (`wifi_app_wait_for_connection`) so intent is clear at call sites.
+- Name static helpers with a `module_action` pattern (`wifi_iface_wait_for_connection`) so intent is clear at call sites.
 - Keep identifiers ASCII-only unless interacting with external APIs that demand
   otherwise.
 

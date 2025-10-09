@@ -10,4 +10,4 @@
  * function. The implementation assumes there is exactly one Ethernet port
  * configured via `ethernet_init_all`.
  */
-esp_err_t ethernet_app_start(void);
+esp_err_t ethernet_iface_start(void);

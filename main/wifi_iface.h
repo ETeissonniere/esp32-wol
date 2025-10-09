@@ -9,4 +9,4 @@
  * `esp_event_loop_create_default()` have been invoked before calling this
  * function.
  */
-esp_err_t wifi_app_start(void);
+esp_err_t wifi_iface_start(void);

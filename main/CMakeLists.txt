@@ -1,6 +1,6 @@
-idf_component_register(SRCS "esp32-wol.c"
-                            "ethernet_app.c"
+idf_component_register(SRCS "main.c"
+                            "ethernet_iface.c"
                             "http_api.c"
                             "nvs_init.c"
-                            "wifi_app.c"
+                            "wifi_iface.c"
                     INCLUDE_DIRS ".")

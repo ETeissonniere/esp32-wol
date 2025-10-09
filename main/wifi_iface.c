@@ -1,4 +1,4 @@
-#include "wifi_app.h"
+#include "wifi_iface.h"
 
 #include "esp_err.h"
 #include "esp_event.h"
@@ -43,7 +43,7 @@ static void event_handler(void *arg, esp_event_base_t event_base,
   }
 }
 
-static esp_err_t wifi_app_create_event_group(void) {
+static esp_err_t wifi_iface_create_event_group(void) {
   s_wifi_event_group = xEventGroupCreate();
   if (s_wifi_event_group == NULL) {
     return ESP_ERR_NO_MEM;
@@ -51,7 +51,7 @@ static esp_err_t wifi_app_create_event_group(void) {
   return ESP_OK;
 }
 
-static esp_err_t wifi_app_init_wifi_stack(void) {
+static esp_err_t wifi_iface_init_wifi_stack(void) {
   esp_netif_t *netif = esp_netif_create_default_wifi_sta();
   if (netif == NULL) {
     return ESP_ERR_NO_MEM;
@@ -61,7 +61,7 @@ static esp_err_t wifi_app_init_wifi_stack(void) {
   return esp_wifi_init(&cfg);
 }
 
-static esp_err_t wifi_app_register_event_handlers(
+static esp_err_t wifi_iface_register_event_handlers(
     esp_event_handler_instance_t *instance_any_id,
     esp_event_handler_instance_t *instance_got_ip) {
   esp_err_t err = esp_event_handler_instance_register(
@@ -79,7 +79,7 @@ static esp_err_t wifi_app_register_event_handlers(
   return err;
 }
 
-static esp_err_t wifi_app_start_sta(void) {
+static esp_err_t wifi_iface_start_sta(void) {
 
   wifi_config_t wifi_config = {
       .sta =
@@ -105,7 +105,7 @@ static esp_err_t wifi_app_start_sta(void) {
   return ESP_OK;
 }
 
-static void wifi_app_wait_for_connection(void) {
+static void wifi_iface_wait_for_connection(void) {
   EventBits_t bits = xEventGroupWaitBits(s_wifi_event_group,
                                          WIFI_CONNECTED_BIT | WIFI_FAIL_BIT,
                                          pdFALSE, pdFALSE, portMAX_DELAY);
@@ -119,16 +119,16 @@ static void wifi_app_wait_for_connection(void) {
   }
 }
 
-esp_err_t wifi_app_start(void) {
-  ESP_ERROR_CHECK(wifi_app_create_event_group());
-  ESP_ERROR_CHECK(wifi_app_init_wifi_stack());
+esp_err_t wifi_iface_start(void) {
+  ESP_ERROR_CHECK(wifi_iface_create_event_group());
+  ESP_ERROR_CHECK(wifi_iface_init_wifi_stack());
 
   esp_event_handler_instance_t instance_any_id;
   esp_event_handler_instance_t instance_got_ip;
   ESP_ERROR_CHECK(
-      wifi_app_register_event_handlers(&instance_any_id, &instance_got_ip));
-  ESP_ERROR_CHECK(wifi_app_start_sta());
+      wifi_iface_register_event_handlers(&instance_any_id, &instance_got_ip));
+  ESP_ERROR_CHECK(wifi_iface_start_sta());
 
-  wifi_app_wait_for_connection();
+  wifi_iface_wait_for_connection();
   return ESP_OK;
 }
