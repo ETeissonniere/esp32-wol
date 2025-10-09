@@ -4,7 +4,6 @@
 #include "esp_event.h"
 #include "esp_log.h"
 #include "esp_wifi.h"
-#include "nvs_flash.h"
 
 #include "common.h"
 #include "sdkconfig.h"
@@ -42,18 +41,6 @@ static void event_handler(void *arg, esp_event_base_t event_base,
     s_retry_num = 0;
     xEventGroupSetBits(s_wifi_event_group, WIFI_CONNECTED_BIT);
   }
-}
-
-static esp_err_t wifi_app_init_nvs(void) {
-  esp_err_t err = nvs_flash_init();
-  if (err == ESP_ERR_NVS_NO_FREE_PAGES ||
-      err == ESP_ERR_NVS_NEW_VERSION_FOUND) {
-    ESP_LOGI(TAG, "Erasing NVS");
-
-    ESP_ERROR_CHECK(nvs_flash_erase());
-    err = nvs_flash_init();
-  }
-  return err;
 }
 
 static esp_err_t wifi_app_create_event_group(void) {
@@ -133,7 +120,6 @@ static void wifi_app_wait_for_connection(void) {
 }
 
 esp_err_t wifi_app_start(void) {
-  ESP_ERROR_CHECK(wifi_app_init_nvs());
   ESP_ERROR_CHECK(wifi_app_create_event_group());
   ESP_ERROR_CHECK(wifi_app_init_wifi_stack());
 
