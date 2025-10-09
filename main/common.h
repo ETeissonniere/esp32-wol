@@ -1,0 +1,1 @@
+static const char *TAG = "esp32_wol";
