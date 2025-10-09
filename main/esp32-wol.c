@@ -1,7 +1,9 @@
+#include "esp_err.h"
 #include "esp_event.h"
 #include "esp_netif.h"
 
 #include "ethernet_app.h"
+#include "http_api.h"
 #include "nvs_init.h"
 #include "wifi_app.h"
 
@@ -12,4 +14,5 @@ void app_main(void) {
 
   ESP_ERROR_CHECK(ethernet_app_start());
   ESP_ERROR_CHECK(wifi_app_start());
+  ESP_ERROR_CHECK(http_api_start());
 }
