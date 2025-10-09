@@ -1,1 +1,1 @@
-static const char *TAG = "esp32_wol";
+#define TAG "esp32_wol"
