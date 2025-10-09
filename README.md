@@ -36,6 +36,10 @@ Run the following from the repository root.
 
 Run `idf.py menuconfig`, open `Esp32 WoL Configuration`, and update `WiFi SSID` and `WiFi Password`. The values persist in `sdkconfig`, so rerun menuconfig if you need to change them later.
 
+### Coding Style
+
+Follow the project conventions documented in [`STYLE_GUIDE.md`](STYLE_GUIDE.md).
+
 ## Maintenance Commands
 
 - `idf.py clean` – remove build artefacts while keeping configuration.
