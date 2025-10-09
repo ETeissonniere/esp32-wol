@@ -31,8 +31,7 @@ static void ethernet_log_device_info(void) {
 esp_err_t ethernet_app_start(void) {
   uint8_t eth_port_cnt = 0;
   esp_eth_handle_t *eth_handles = NULL;
-  esp_err_t err = ethernet_init_all(&eth_handles, &eth_port_cnt);
-  ESP_ERROR_CHECK(err);
+  ESP_ERROR_CHECK(ethernet_init_all(&eth_handles, &eth_port_cnt));
   if (eth_port_cnt != 1 || eth_handles == NULL) {
     ESP_LOGE(TAG, "Unexpected Ethernet port count: %u", (unsigned)eth_port_cnt);
     return ESP_ERR_INVALID_STATE;
@@ -40,11 +39,8 @@ esp_err_t ethernet_app_start(void) {
 
   s_eth_handle = eth_handles[0];
 
-  err = ethernet_attach_netif();
-  ESP_ERROR_CHECK(err);
-
-  err = esp_eth_start(s_eth_handle);
-  ESP_ERROR_CHECK(err);
+  ESP_ERROR_CHECK(ethernet_attach_netif());
+  ESP_ERROR_CHECK(esp_eth_start(s_eth_handle));
 
   ethernet_log_device_info();
 
