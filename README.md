@@ -1,8 +1,18 @@
-# ESP32 WOL (Ethernet)
+# ESP32 Wake On Lan Trigger
 
-Small ESP-IDF project that boots the Ethernet MAC/PHY and logs link and IP
-information using the [`ethernet_init`](main/idf_component.yml) managed
-component. The source lives in `main/esp32-wol.c`.
+My home rig is connected over WiFi to my home network due to living in a
+rental appartment. It is also not always on as I do not appreciate the
+faint sound of my fans.
+
+As a result, I often want to turn it on when I am either not next to it, or
+when I am working from a café (via Tailscale back to the home network). The
+typical solution here is Wake On Lan, which is unfortunately not available
+over WiFi.
+
+This small ESP32 project fixes this, by plugging the [ESP32-S3-ETH](https://www.waveshare.com/wiki/ESP32-S3-ETH)
+over Ethernet to my rig, and connecting it over WiFi to my home network, I
+now can trigger the emission of Wake On Lan pakcets via simple, over WiFi,
+HTTP calls.
 
 ## Prerequisites
 
@@ -18,7 +28,15 @@ After installing ESP-IDF, remember to export the tools in every shell:
 
 The project is already configured for the ESP32-S3 target and the Waveshare
 Ethernet pinout via `sdkconfig.defaults`, so you do not need to run
-`idf.py set-target`.
+`idf.py set-target`. You however need to configure your WiFi credentials via
+`idf.py menuconfig` (see below).
+
+When the ESP32 is flashed, you can then connect it over Ethernet to the target
+computer.
+
+> Note that this assumes the configuration of your computer or server to support
+> Wake On Lan, which is typically done via a mix of Bios/UEFI settings (refer
+> to your motherboard documentation) and system settings.
 
 ## Quick Start Commands
 
