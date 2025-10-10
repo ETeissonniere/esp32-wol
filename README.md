@@ -14,6 +14,15 @@ over Ethernet to my rig, and connecting it over WiFi to my home network, I
 now can trigger the emission of Wake On Lan pakcets via simple, over WiFi,
 HTTP calls.
 
+Once deployed, you can easily wake up your rig via a simple HTTP POST request:
+```sh
+# If you are fancy and use HTTPie
+http POST http://esp32-wol:80/wol
+
+# If you are a curl die hard
+curl -X POST http://esp32-wol:80/wol
+```
+
 ## Prerequisites
 
 - ESP-IDF v5.0 or newer (install and export the environment as documented by Espressif)
