@@ -36,9 +36,9 @@ Run the following from the repository root.
 
 Run `idf.py menuconfig`, open `Esp32 WoL Configuration`, and update `WiFi SSID` and `WiFi Password`. The values persist in `sdkconfig`, so rerun menuconfig if you need to change them later.
 
-### Wake-on-LAN Target
+### Wake-on-LAN Behaviour
 
-If you plan to send WoL packets to a specific device, configure its MAC address through `idf.py menuconfig` under `Esp32 WoL Configuration → Target MAC address for WoL`. The address must use the `AA:BB:CC:DD:EE:FF` format and can be updated anytime by rerunning menuconfig.
+The firmware always emits the WoL magic packet to the Ethernet broadcast address and repeats the broadcast MAC inside the payload, so no per-target configuration is required. Ensure the host you want to wake accepts broadcast WoL frames.
 
 ### Coding Style
 
