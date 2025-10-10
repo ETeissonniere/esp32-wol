@@ -2,6 +2,7 @@
 
 #include "esp_err.h"
 #include "esp_eth_netif_glue.h"
+#include "esp_event.h"
 #include "esp_log.h"
 #include "esp_netif.h"
 
@@ -10,6 +11,7 @@
 #include "common.h"
 
 static esp_eth_handle_t s_eth_handle;
+static volatile bool s_eth_link_up = false;
 
 static esp_err_t ethernet_iface_init_handle(void) {
   uint8_t eth_port_cnt = 0;
@@ -52,9 +54,34 @@ static void ethernet_iface_log_device_info(void) {
            info.pin.eth_spi_int);
 }
 
+static void ethernet_iface_connected_handler(void *arg, esp_event_base_t base,
+                                             int32_t id, void *data) {
+  s_eth_link_up = true;
+  ESP_LOGI(TAG, "Ethernet LINK UP");
+}
+
+static void ethernet_iface_disconnected_handler(void *arg,
+                                                esp_event_base_t base,
+                                                int32_t id, void *data) {
+  s_eth_link_up = false;
+  ESP_LOGI(TAG, "Ethernet LINK DOWN");
+}
+
+bool ethernet_iface_link_is_up(void) { return s_eth_link_up; }
+
+esp_eth_handle_t ethernet_iface_get_handle(void) { return s_eth_handle; }
+
 esp_err_t ethernet_iface_start(void) {
   ESP_ERROR_CHECK(ethernet_iface_init_handle());
   ESP_ERROR_CHECK(ethernet_iface_start_driver());
+
+  ESP_ERROR_CHECK(esp_event_handler_instance_register(
+      ETH_EVENT, ETHERNET_EVENT_CONNECTED, &ethernet_iface_connected_handler,
+      NULL, NULL));
+  ESP_ERROR_CHECK(esp_event_handler_instance_register(
+      ETH_EVENT, ETHERNET_EVENT_DISCONNECTED,
+      &ethernet_iface_disconnected_handler, NULL, NULL));
+
   ethernet_iface_log_device_info();
   return ESP_OK;
 }
