@@ -15,10 +15,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install ESP-IDF
-        uses: espressif/install-esp-idf-action@v1
-        with:
-          version: v5.1.2
-
       - name: Build firmware
-        run: idf.py build
+        uses: espressif/esp-idf-ci-action@v1
+        with:
+          target: esp32s3
