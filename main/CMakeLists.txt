@@ -4,4 +4,5 @@ idf_component_register(SRCS "main.c"
                             "http_api.c"
                             "nvs_init.c"
                             "wifi_iface.c"
-                    INCLUDE_DIRS ".")
+                    INCLUDE_DIRS "."
+                    EMBED_FILES "www/index.html")
