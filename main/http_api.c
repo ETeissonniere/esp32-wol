@@ -23,8 +23,8 @@
 #define HTTPD_RESPONSE_WOL_SUCCESS                                             \
   "WoL packet succesfully sent, server should wake up soon"
 
-extern const uint8_t index_html_start[] asm("_binary_www_index_html_start");
-extern const uint8_t index_html_end[] asm("_binary_www_index_html_end");
+extern const uint8_t index_html_start[] asm("_binary_index_html_start");
+extern const uint8_t index_html_end[] asm("_binary_index_html_end");
 
 #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
 
