@@ -23,6 +23,10 @@ http POST http://esp32-wol:80/wol
 curl -X POST http://esp32-wol:80/wol
 ```
 
+Prefer a visual interface? Browse to `http://esp32-wol/` and click the **Wake Up**
+button. The embedded web UI calls the same endpoint, shows the current status,
+and works from mobile browsers too.
+
 ## Prerequisites
 
 - ESP-IDF v5.0 or newer (install and export the environment as documented by Espressif)

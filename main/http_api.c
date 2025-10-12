@@ -1,7 +1,5 @@
 #include "http_api.h"
 
-#include <string.h>
-
 #include "esp_err.h"
 #include "esp_http_server.h"
 #include "esp_log.h"
@@ -9,44 +7,22 @@
 #include "esp_wifi_types_generic.h"
 
 #include "common.h"
-#include "ethernet_iface.h"
-#include "ethernet_wol.h"
+#include "http_api_index.h"
+#include "http_api_wol.h"
 
-#define HTTPD_STATUS_503 "503 Unavailable"
-#define HTTPD_STATUS_504 "504 Internal Server Error"
-#define HTTPD_STATUS_202 "202 Accepted"
-#define HTTPD_RESPONSE_NO_LINK "Ethernet link is down"
-#define HTTPD_RESPONSE_WOL_FAILED                                              \
-  "Ethernet link is up, but we were unable to send the WoL packet"
-#define HTTPD_RESPONSE_WOL_SUCCESS                                             \
-  "WoL packet succesfully sent, server should wake up soon"
+static esp_err_t http_api_register_handlers(httpd_handle_t server) {
+  esp_err_t err = http_api_index_register(server);
+  if (err != ESP_OK) {
+    return err;
+  }
 
-static esp_err_t http_api_handler_post_wol(httpd_req_t *req) {
-  if (!ethernet_iface_link_is_up()) {
-    httpd_resp_set_status(req, HTTPD_STATUS_503);
-    httpd_resp_send(req, HTTPD_RESPONSE_NO_LINK,
-                    strlen(HTTPD_RESPONSE_NO_LINK));
-  } else {
-    esp_err_t err = ethernet_wol_send();
-    if (err != ESP_OK) {
-      ESP_LOGE(TAG, "sending WoL packet failed");
-      httpd_resp_set_status(req, HTTPD_STATUS_504);
-      httpd_resp_send(req, HTTPD_RESPONSE_WOL_FAILED,
-                      strlen(HTTPD_RESPONSE_WOL_FAILED));
-    } else {
-      httpd_resp_set_status(req, HTTPD_STATUS_202);
-      httpd_resp_send(req, HTTPD_RESPONSE_WOL_SUCCESS,
-                      strlen(HTTPD_RESPONSE_WOL_SUCCESS));
-    }
+  err = http_api_wol_register(server);
+  if (err != ESP_OK) {
+    return err;
   }
 
   return ESP_OK;
 }
-
-static const httpd_uri_t post_wol = {.uri = "/wol",
-                                     .method = HTTP_POST,
-                                     .handler = http_api_handler_post_wol,
-                                     .user_ctx = NULL};
 
 static httpd_handle_t http_api_start_server(void) {
   httpd_handle_t server = NULL;
@@ -54,10 +30,7 @@ static httpd_handle_t http_api_start_server(void) {
   config.lru_purge_enable = true;
 
   if (httpd_start(&server, &config) == ESP_OK) {
-    esp_err_t err = httpd_register_uri_handler(server, &post_wol);
-    if (err != ESP_OK) {
-      ESP_LOGE(TAG, "failed to register HTTP handler: %s",
-               esp_err_to_name(err));
+    if (http_api_register_handlers(server) != ESP_OK) {
       httpd_stop(server);
       return NULL;
     }
