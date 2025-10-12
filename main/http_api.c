@@ -1,8 +1,5 @@
 #include "http_api.h"
 
-#include <stdint.h>
-#include <string.h>
-
 #include "esp_err.h"
 #include "esp_http_server.h"
 #include "esp_log.h"
@@ -10,75 +7,18 @@
 #include "esp_wifi_types_generic.h"
 
 #include "common.h"
-#include "ethernet_iface.h"
-#include "ethernet_wol.h"
-
-#define HTTPD_STATUS_200 "200 OK"
-#define HTTPD_STATUS_503 "503 Unavailable"
-#define HTTPD_STATUS_504 "504 Internal Server Error"
-#define HTTPD_STATUS_202 "202 Accepted"
-#define HTTPD_RESPONSE_NO_LINK "Ethernet link is down"
-#define HTTPD_RESPONSE_WOL_FAILED                                              \
-  "Ethernet link is up, but we were unable to send the WoL packet"
-#define HTTPD_RESPONSE_WOL_SUCCESS                                             \
-  "WoL packet succesfully sent, server should wake up soon"
-
-extern const uint8_t index_html_start[] asm("_binary_index_html_start");
-extern const uint8_t index_html_end[] asm("_binary_index_html_end");
-
-#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
-
-static esp_err_t http_api_handler_get_root(httpd_req_t *req) {
-  const size_t index_html_len = index_html_end - index_html_start;
-  httpd_resp_set_type(req, "text/html; charset=utf-8");
-  httpd_resp_set_status(req, HTTPD_STATUS_200);
-  httpd_resp_set_hdr(req, "Cache-Control", "no-store");
-  httpd_resp_send(req, (const char *)index_html_start, index_html_len);
-  return ESP_OK;
-}
-
-static const httpd_uri_t get_root = {.uri = "/",
-                                     .method = HTTP_GET,
-                                     .handler = http_api_handler_get_root,
-                                     .user_ctx = NULL};
-
-static esp_err_t http_api_handler_post_wol(httpd_req_t *req) {
-  if (!ethernet_iface_link_is_up()) {
-    httpd_resp_set_status(req, HTTPD_STATUS_503);
-    httpd_resp_send(req, HTTPD_RESPONSE_NO_LINK,
-                    strlen(HTTPD_RESPONSE_NO_LINK));
-  } else {
-    esp_err_t err = ethernet_wol_send();
-    if (err != ESP_OK) {
-      ESP_LOGE(TAG, "sending WoL packet failed");
-      httpd_resp_set_status(req, HTTPD_STATUS_504);
-      httpd_resp_send(req, HTTPD_RESPONSE_WOL_FAILED,
-                      strlen(HTTPD_RESPONSE_WOL_FAILED));
-    } else {
-      httpd_resp_set_status(req, HTTPD_STATUS_202);
-      httpd_resp_send(req, HTTPD_RESPONSE_WOL_SUCCESS,
-                      strlen(HTTPD_RESPONSE_WOL_SUCCESS));
-    }
-  }
-
-  return ESP_OK;
-}
-
-static const httpd_uri_t post_wol = {.uri = "/wol",
-                                     .method = HTTP_POST,
-                                     .handler = http_api_handler_post_wol,
-                                     .user_ctx = NULL};
+#include "http_api_index.h"
+#include "http_api_wol.h"
 
 static esp_err_t http_api_register_handlers(httpd_handle_t server) {
-  const httpd_uri_t *handlers[] = {&get_root, &post_wol};
+  esp_err_t err = http_api_index_register(server);
+  if (err != ESP_OK) {
+    return err;
+  }
 
-  for (size_t i = 0; i < ARRAY_SIZE(handlers); ++i) {
-    esp_err_t err = httpd_register_uri_handler(server, handlers[i]);
-    if (err != ESP_OK) {
-      ESP_LOGE(TAG, "failed to register HTTP handler (%s): %s",
-               handlers[i]->uri, esp_err_to_name(err));
-      return err;
-    }
+  err = http_api_wol_register(server);
+  if (err != ESP_OK) {
+    return err;
   }
 
   return ESP_OK;
