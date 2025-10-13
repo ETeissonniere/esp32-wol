@@ -63,6 +63,16 @@ Run the following from the repository root.
 | Flash and immediately monitor | `idf.py -p /dev/ttyACM0 flash monitor` | Press <kbd>Ctrl</kbd>+<kbd>]</kbd> to exit the monitor. |
 | Monitor only | `idf.py -p /dev/ttyACM0 monitor` | Useful when the device is already flashed. |
 
+### Running with Docker (Linux)
+
+On Linux you can avoid installing ESP-IDF locally and run the commands inside the official Espressif container:
+
+```bash
+docker run --rm -v "$(pwd)":/workspaces/esp32-wol --privileged -it espressif/idf:latest
+```
+
+The container drops you into an ESP-IDF shell with the current repository mounted at `/workspaces/esp32-wol`, so you can execute any of the `idf.py` commands above from there.
+
 ### Wi-Fi Credentials
 
 Run `idf.py menuconfig`, open `Esp32 WoL Configuration`, and update `WiFi SSID` and `WiFi Password`. The values persist in `sdkconfig`, so rerun menuconfig if you need to change them later.
