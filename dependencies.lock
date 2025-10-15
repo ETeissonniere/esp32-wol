@@ -1,7 +1,6 @@
 dependencies:
   espressif/ch390:
-    component_hash: 
-      5a23cac6e023067251943f7222fe94585a34579181a79a949b634946e2e6b981
+    component_hash: 5a23cac6e023067251943f7222fe94585a34579181a79a949b634946e2e6b981
     dependencies:
     - name: idf
       require: private
@@ -11,8 +10,7 @@ dependencies:
       type: service
     version: 0.3.0
   espressif/dm9051:
-    component_hash: 
-      24a150037e2bc4fa646e1ad51629588e52d5db047d5682b659595d9a5f8d17fe
+    component_hash: 24a150037e2bc4fa646e1ad51629588e52d5db047d5682b659595d9a5f8d17fe
     dependencies:
     - name: idf
       require: private
@@ -22,8 +20,7 @@ dependencies:
       type: service
     version: 1.0.0
   espressif/enc28j60:
-    component_hash: 
-      a20c685004ea37f9b2fe4ba6d5d0ba948f9ec3a46a4dab0d471b151575a90e27
+    component_hash: a20c685004ea37f9b2fe4ba6d5d0ba948f9ec3a46a4dab0d471b151575a90e27
     dependencies:
     - name: idf
       require: private
@@ -33,8 +30,7 @@ dependencies:
       type: service
     version: 1.0.1
   espressif/ethernet_init:
-    component_hash: 
-      038de7a25c8d800e0802abe48d2a72ba74cbf3b9310b56369b51264a6a1c70c1
+    component_hash: 038de7a25c8d800e0802abe48d2a72ba74cbf3b9310b56369b51264a6a1c70c1
     dependencies:
     - name: espressif/ch390
       registry_url: https://components.espressif.com
@@ -128,8 +124,7 @@ dependencies:
       type: service
     version: 1.0.0
   espressif/ksz8851snl:
-    component_hash: 
-      c925da1ac4bc2750c7632c5faa93f44f37ec822d2a16b75a96d60bef2245fc24
+    component_hash: c925da1ac4bc2750c7632c5faa93f44f37ec822d2a16b75a96d60bef2245fc24
     dependencies:
     - name: idf
       require: private
@@ -139,8 +134,7 @@ dependencies:
       type: service
     version: 1.0.0
   espressif/lan865x:
-    component_hash: 
-      2a27887016922bea266f6052bd811b720b30e516188863051971cbc809710b4e
+    component_hash: 2a27887016922bea266f6052bd811b720b30e516188863051971cbc809710b4e
     dependencies:
     - name: espressif/lan86xx_common
       registry_url: https://components.espressif.com
@@ -154,8 +148,7 @@ dependencies:
       type: service
     version: 0.1.2
   espressif/lan86xx_common:
-    component_hash: 
-      6dcb1be9f43ae940979bd628fa5bee278949b66c545e1fe2321e486102e81026
+    component_hash: 6dcb1be9f43ae940979bd628fa5bee278949b66c545e1fe2321e486102e81026
     dependencies:
     - name: idf
       require: private
@@ -165,8 +158,7 @@ dependencies:
       type: service
     version: 1.0.0
   espressif/w5500:
-    component_hash: 
-      0bfa69f4ebd57ec8554ee28f31f777f06df549dcb69f48121845402d447d077a
+    component_hash: 0bfa69f4ebd57ec8554ee28f31f777f06df549dcb69f48121845402d447d077a
     dependencies:
     - name: idf
       require: private
